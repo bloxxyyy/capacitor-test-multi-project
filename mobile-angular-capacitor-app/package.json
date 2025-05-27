@@ -9,6 +9,7 @@
     "production": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
+    "lintfix": "ng lint --fix",
     "audit": "npm audit",
     "format": "prettier --write \"src/**/*.ts\"",
     "mobile:android": "npm run build:mobile && npx cap copy android && npx cap open android",

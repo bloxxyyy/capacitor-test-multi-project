@@ -18,10 +18,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js 21.x (npm 11.4.1)
+      - name: Use Node.js 22.x (npm 11.4.1)
         uses: actions/setup-node@v4
         with:
-          node-version: '21'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: mobile-angular-capacitor-app/package-lock.json
 

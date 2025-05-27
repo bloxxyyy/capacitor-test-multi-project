@@ -1,0 +1,49 @@
+name: CI - Angular Capacitor App
+
+on:
+  push:
+    branches:
+      - '**'  # Trigger on push to any branch
+
+jobs:
+  build-and-test:
+    name: Audit, Lint, Test, Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: mobile-angular-capacitor-app
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 21.x (npm 11.4.1)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21'
+          cache: 'npm'
+          cache-dependency-path: mobile-angular-capacitor-app/package-lock.json
+
+      - name: Cache npm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('mobile-angular-capacitor-app/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Security Audit
+        run: npm audit --audit-level=low
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Unit Tests
+        run: npm run test
+
+      - name: Build Production
+        run: npm run production

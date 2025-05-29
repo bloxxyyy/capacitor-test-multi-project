@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authorizationGuard } from './core/guards/authorization/authorization.guard';
+import { authorizationGuard } from './core/guards/auth/auth.guard';
 import { UserRole } from './core/enums/user-role';
 
 export const routes: Routes = [

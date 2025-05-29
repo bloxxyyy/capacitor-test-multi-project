@@ -7,10 +7,6 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: '**',
-    loadComponent: () => import('./no-page.component').then((m) => m.NoPageComponent),
-  },
-  {
     path: 'account-authentication',
     loadChildren: () =>
       import('./features/account-authentication/account-authentication.routes').then(
@@ -23,5 +19,9 @@ export const routes: Routes = [
       import('./features/account-overview/account-overview.routes').then(
         (m) => m.ACCOUNT_OVERVIEW_ROUTES
       ),
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./no-page.component').then((m) => m.NoPageComponent),
   },
 ];

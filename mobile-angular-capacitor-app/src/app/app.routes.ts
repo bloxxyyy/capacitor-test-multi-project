@@ -8,17 +8,20 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: () =>
-      import('./no-page.component').then(m => m.NoPageComponent),
+    loadComponent: () => import('./no-page.component').then((m) => m.NoPageComponent),
   },
   {
     path: 'account-authentication',
     loadChildren: () =>
-      import('./features/account-authentication/account-authentication.routes').then(m => m.AUTHENTICATION_ROUTES),
+      import('./features/account-authentication/account-authentication.routes').then(
+        (m) => m.AUTHENTICATION_ROUTES
+      ),
   },
   {
     path: 'account-overview',
     loadChildren: () =>
-      import('./features/account-overview/account-overview.routes').then(m => m.ACCOUNT_OVERVIEW_ROUTES),
-  }
+      import('./features/account-overview/account-overview.routes').then(
+        (m) => m.ACCOUNT_OVERVIEW_ROUTES
+      ),
+  },
 ];

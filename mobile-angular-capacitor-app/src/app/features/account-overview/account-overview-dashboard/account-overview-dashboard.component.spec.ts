@@ -8,9 +8,8 @@ describe('AccountOverviewDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccountOverviewDashboardComponent]
-    })
-    .compileComponents();
+      imports: [AccountOverviewDashboardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AccountOverviewDashboardComponent);
     component = fixture.componentInstance;

@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-authentication-dashboard',
   imports: [],
   templateUrl: './authentication-dashboard.component.html',
-  styleUrl: './authentication-dashboard.component.scss'
+  styleUrl: './authentication-dashboard.component.scss',
 })
-export class AuthenticationDashboardComponent {
-
-}
+export class AuthenticationDashboardComponent {}

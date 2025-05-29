@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-account-overview-dashboard',
   imports: [],
   templateUrl: './account-overview-dashboard.component.html',
-  styleUrl: './account-overview-dashboard.component.scss'
+  styleUrl: './account-overview-dashboard.component.scss',
 })
-export class AccountOverviewDashboardComponent {
-
-}
+export class AccountOverviewDashboardComponent {}

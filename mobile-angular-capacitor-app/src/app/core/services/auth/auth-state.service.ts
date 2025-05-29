@@ -6,13 +6,13 @@ import { UserRole } from '../../enums/user-role';
 })
 export class AuthenticationStateService {
   private isAuthenticatedSignal = signal(false);
-  private userRolesSignal = signal<UserRole[]>([UserRole.Guest]);
+  private userRolesSignal = signal<UserRole[] | string[]>([UserRole.Guest]);
 
   get isAuthenticated(): Signal<boolean> {
     return this.isAuthenticatedSignal.asReadonly();
   }
 
-  get userRoles(): Signal<UserRole[]> {
+  get userRoles(): Signal<UserRole[] | string[]> {
     return this.userRolesSignal.asReadonly();
   }
 

@@ -8,8 +8,9 @@ import { UserRole } from '../../../enums/user-role';
 export class AuthorizationService {
   private authState = inject(AuthenticationStateService);
 
-  hasAnyRole(roles: UserRole[]): boolean {
-    const userRoles = this.authState.userRoles();
-    return roles.some((role) => userRoles.includes(role));
+  hasAnyRole(roles: UserRole[] | string[]): boolean {
+    if (!roles?.length) return false;
+    const userRoles = (this.authState.userRoles() ?? []).map(String);
+    return roles.some((role) => userRoles.includes(String(role)));
   }
 }

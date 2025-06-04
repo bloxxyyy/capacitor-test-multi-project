@@ -14,36 +14,38 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "mobile:android": "npm run build:mobile && npx cap copy android && npx cap open android",
     "mobile:ios": "npm run build:mobile && npx cap copy ios && npx cap open ios",
-    "outdated": "npm outdated --depth=0"
+    "outdated": "npm outdated --depth=0",
+    "upgrade": "ncu --upgrade"
   },
   "dependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/compiler": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
-    "@angular/platform-browser": "^20.0.0",
-    "@angular/platform-browser-dynamic": "^20.0.0",
-    "@angular/router": "^20.0.0",
+    "@angular/common": "^20.0.1",
+    "@angular/compiler": "^20.0.1",
+    "@angular/core": "^20.0.1",
+    "@angular/forms": "^20.0.1",
+    "@angular/platform-browser": "^20.0.1",
+    "@angular/platform-browser-dynamic": "^20.0.1",
+    "@angular/router": "^20.0.1",
     "@capacitor/android": "^7.2.0",
     "@capacitor/core": "^7.2.0",
     "@capacitor/ios": "^7.2.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.0.0",
-    "@angular/cli": "^20.0.0",
-    "@angular/compiler-cli": "^20.0.0",
+    "@angular-devkit/build-angular": "^20.0.1",
+    "@angular/cli": "^20.0.1",
+    "@angular/compiler-cli": "^20.0.1",
     "@capacitor/cli": "^7.2.0",
-    "@types/jasmine": "~5.1.0",
+    "@types/jasmine": "^5.1.8",
     "@web/test-runner": "^0.20.2",
-    "angular-eslint": "19.6.0",
-    "eslint": "^9.27.0",
+    "angular-eslint": "^19.7.1",
+    "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-prettier": "^5.4.1",
     "jasmine-core": "^5.7.1",
-    "prettier": "3.5.3",
+    "npm-check-updates": "^18.0.1",
+    "prettier": "^3.5.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.0"
+    "typescript-eslint": "^8.33.1"
   }
 }

@@ -7,7 +7,10 @@ describe('AuthorizationService', () => {
   let mockAuthStateService: jasmine.SpyObj<AuthenticationStateService>;
 
   beforeEach(() => {
-    mockAuthStateService = jasmine.createSpyObj<AuthenticationStateService>('AuthenticationStateService', ['userRoles']);
+    mockAuthStateService = jasmine.createSpyObj<AuthenticationStateService>(
+      'AuthenticationStateService',
+      ['userRoles']
+    );
 
     TestBed.configureTestingModule({
       providers: [
@@ -20,17 +23,17 @@ describe('AuthorizationService', () => {
   });
 
   it('should return true when user has a specified role', () => {
-    mockAuthStateService.userRoles.and.returnValue(["TestRole"]);
+    mockAuthStateService.userRoles.and.returnValue(['TestRole']);
 
-    const result = service.hasAnyRole(["TestRole", "TestRole2"]);
+    const result = service.hasAnyRole(['TestRole', 'TestRole2']);
 
     expect(result).toBeTrue();
   });
 
   it('should return false when user has none of the specified roles', () => {
-    mockAuthStateService.userRoles.and.returnValue(["TestRole"]);
+    mockAuthStateService.userRoles.and.returnValue(['TestRole']);
 
-    const result = service.hasAnyRole(["TestRole2"]);
+    const result = service.hasAnyRole(['TestRole2']);
 
     expect(result).toBeFalse();
   });

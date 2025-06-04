@@ -9,7 +9,7 @@ bootstrapApplication(AppComponent, {
     ...(appConfig.providers || []),
     provideCheckNoChangesConfig({
       exhaustive: true,
-      interval: isDevMode() ? 1000 : 5000
-    })
-  ]
-}).catch(err => console.error(err));
+      interval: isDevMode() ? 1000 : 5000,
+    }),
+  ],
+}).catch((err) => console.error(err));

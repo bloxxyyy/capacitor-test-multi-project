@@ -1,4 +1,4 @@
-import { Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthenticationStateService } from '../app/core/services/auth-state.service';
 import { AuthorizationService } from '../app/core/services/authorization.service';
 import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
@@ -42,8 +42,11 @@ describe('authorizationGuard', () => {
 
   function runGuard(requiredRoles: UserRole[] = [], url = '/some-url') {
     const guard = authorizationGuard(requiredRoles);
-    const fakeState = { url } as any;
-    return TestBed.runInInjectionContext(() => guard(null as any, fakeState));
+
+    const fakeRoute = {} as ActivatedRouteSnapshot;
+    const fakeState = { url } as RouterStateSnapshot;
+
+    return TestBed.runInInjectionContext(() => guard(fakeRoute, fakeState));
   }
 
   it('redirects to accountAuthentication if user not authenticated and not already on that URL', () => {

@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthenticationStateService } from '../../services/auth/auth-state.service';
-import { AuthorizationService } from '../../services/auth/authorization/authorization.service';
 import { UserRole } from '../../enums/user-role';
+import { AuthenticationStateService } from '../../services/auth-state.service';
+import { AuthorizationService } from '../../services/authorization.service';
 
 export function authorizationGuard(requiredRoles: UserRole[] = []): CanActivateFn {
   return (_route, state: RouterStateSnapshot) => {

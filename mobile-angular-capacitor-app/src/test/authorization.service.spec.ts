@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { AuthorizationService } from './authorization.service';
-import { AuthenticationStateService } from '../auth-state.service';
+import { AuthorizationService } from '../app/core/services/authorization.service';
+import { AuthenticationStateService } from '../app/core/services/auth-state.service';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;

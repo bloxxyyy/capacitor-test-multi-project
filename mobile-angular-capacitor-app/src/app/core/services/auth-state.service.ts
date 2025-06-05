@@ -1,5 +1,5 @@
 import { Injectable, Signal, signal } from '@angular/core';
-import { UserRole } from '../../enums/user-role';
+import { UserRole } from '../enums/user-role';
 
 @Injectable({
   providedIn: 'root',

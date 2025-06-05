@@ -1,7 +1,7 @@
 import { render } from '@testing-library/angular';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AppComponent } from './app.component';
+import { AppComponent } from '../app/app.component';
 
 describe('AppComponent', () => {
   it('should render the router outlet', async () => {

@@ -3,7 +3,6 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'], // This file will configure the zoneless test env
-  globalSetup: 'jest-preset-angular/global-setup',
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [

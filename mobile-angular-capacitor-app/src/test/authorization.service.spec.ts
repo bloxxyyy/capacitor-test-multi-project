@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { AuthorizationService } from '../app/core/services/authorization.service';
-import { AuthenticationStateService } from '../app/core/services/auth-state.service';
+import { AuthenticationService } from '../app/core/services/authentication.service';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;
-  let mockAuthStateService: jest.Mocked<AuthenticationStateService>;
+  let mockAuthStateService: jest.Mocked<AuthenticationService>;
 
   beforeEach(() => {
     mockAuthStateService = {
       userRoles: jest.fn(),
-    } as unknown as jest.Mocked<AuthenticationStateService>;
+    } as unknown as jest.Mocked<AuthenticationService>;
 
     TestBed.configureTestingModule({
       providers: [
         AuthorizationService,
-        { provide: AuthenticationStateService, useValue: mockAuthStateService },
+        { provide: AuthenticationService, useValue: mockAuthStateService },
         provideZonelessChangeDetection(),
       ],
     });

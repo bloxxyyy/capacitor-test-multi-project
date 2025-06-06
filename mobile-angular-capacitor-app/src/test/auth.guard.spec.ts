@@ -1,29 +1,29 @@
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthenticationStateService } from '../app/core/services/auth-state.service';
-import { AuthorizationService } from '../app/core/services/authorization.service';
-import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
 import { UserRole } from '../app/core/enums/user-role';
-import { authorizationGuard } from '../app/core/guards/auth/auth.guard';
 import { TestBed } from '@angular/core/testing';
+import { AuthorizationService } from '../app/core/services/authorization.service';
+import { AuthenticationService } from '../app/core/services/authentication.service';
+import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
+import { authorizationGuard } from '../app/core/guards/auth/auth.guard';
 
 describe('authorizationGuard', () => {
-  let mockAuthStateService: jest.Mocked<AuthenticationStateService>;
-  let mockAuthorizationService: Partial<jest.Mocked<AuthorizationService>>;
-  let mockRouter: Partial<jest.Mocked<Router>>;
+  let mockAuthStateService: jest.Mocked<AuthenticationService>;
+  let mockAuthorizationService: jest.Mocked<AuthorizationService>;
+  let mockRouter: jest.Mocked<Router>;
   let mockUrlConfigService: jest.Mocked<UrlConfigurationService>;
 
   beforeEach(() => {
     mockAuthStateService = {
       isAuthenticated: jest.fn(),
-    } as unknown as jest.Mocked<AuthenticationStateService>;
+    } as unknown as jest.Mocked<AuthenticationService>;
 
     mockAuthorizationService = {
       hasAnyRole: jest.fn(),
-    } as Partial<jest.Mocked<AuthorizationService>>;
+    } as unknown as jest.Mocked<AuthorizationService>;
 
     mockRouter = {
       createUrlTree: jest.fn(),
-    } as Partial<jest.Mocked<Router>>;
+    } as unknown as jest.Mocked<Router>;
 
     mockUrlConfigService = {
       accountAuthentication: '/some-custom-auth-url',
@@ -32,7 +32,7 @@ describe('authorizationGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthenticationStateService, useValue: mockAuthStateService },
+        { provide: AuthenticationService, useValue: mockAuthStateService },
         { provide: AuthorizationService, useValue: mockAuthorizationService },
         { provide: Router, useValue: mockRouter },
         { provide: UrlConfigurationService, useValue: mockUrlConfigService },
@@ -40,20 +40,18 @@ describe('authorizationGuard', () => {
     });
   });
 
-  function runGuard(requiredRoles: UserRole[] = [], url = '/some-url') {
+  async function runGuard(requiredRoles: UserRole[] = [], currentUrl = '/some-url') {
     const guard = authorizationGuard(requiredRoles);
-
     const fakeRoute = {} as ActivatedRouteSnapshot;
-    const fakeState = { url } as RouterStateSnapshot;
-
-    return TestBed.runInInjectionContext(() => guard(fakeRoute, fakeState));
+    const fakeState = { url: currentUrl } as RouterStateSnapshot;
+    return await TestBed.runInInjectionContext(() => guard(fakeRoute, fakeState));
   }
 
-  it('redirects to accountAuthentication if user not authenticated and not already on that URL', () => {
-    mockAuthStateService.isAuthenticated.mockReturnValue(false);
-    mockRouter.createUrlTree?.mockReturnValue({} as UrlTree);
+  it('redirects to accountAuthentication if user not authenticated and not already on that URL', async () => {
+    mockAuthStateService.isAuthenticated.mockResolvedValue(false);
+    mockRouter.createUrlTree.mockReturnValue({} as UrlTree);
 
-    const result = runGuard([], '/not-authenticated-url');
+    const result = await runGuard([], '/not-authenticated-url');
 
     expect(mockAuthStateService.isAuthenticated).toHaveBeenCalled();
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith([
@@ -62,58 +60,60 @@ describe('authorizationGuard', () => {
     expect(result).toEqual({});
   });
 
-  it('allows navigation if user not authenticated and already on accountAuthentication URL', () => {
-    mockAuthStateService.isAuthenticated.mockReturnValue(false);
+  it('allows navigation if user not authenticated and already on accountAuthentication URL', async () => {
+    mockAuthStateService.isAuthenticated.mockResolvedValue(false);
 
-    const result = runGuard([], `${mockUrlConfigService.accountAuthentication}/some-path`);
+    const result = await runGuard([], `${mockUrlConfigService.accountAuthentication}/sub-path`);
 
     expect(mockAuthStateService.isAuthenticated).toHaveBeenCalled();
     expect(mockRouter.createUrlTree).not.toHaveBeenCalled();
     expect(result).toBe(true);
   });
 
-  it('redirects to forbidden if user authenticated but lacks required role and not already on forbidden URL', () => {
-    mockAuthStateService.isAuthenticated.mockReturnValue(true);
-    mockAuthorizationService.hasAnyRole?.mockReturnValue(false);
-    mockRouter.createUrlTree?.mockReturnValue({} as UrlTree);
+  it('redirects to forbidden if user authenticated but lacks required role and not already on forbidden URL', async () => {
+    mockAuthStateService.isAuthenticated.mockResolvedValue(true);
+    mockAuthorizationService.hasAnyRole.mockReturnValue(false);
+    mockRouter.createUrlTree.mockReturnValue({} as UrlTree);
 
     const requiredRoles = [UserRole.User];
-    const result = runGuard(requiredRoles, '/some-protected-url');
+    const result = await runGuard(requiredRoles, '/protected-resource');
 
+    expect(mockAuthStateService.isAuthenticated).toHaveBeenCalled();
     expect(mockAuthorizationService.hasAnyRole).toHaveBeenCalledWith(requiredRoles);
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith([mockUrlConfigService.forbidden]);
     expect(result).toEqual({});
   });
 
-  it('allows navigation if user authenticated but lacks role and already on forbidden URL', () => {
-    mockAuthStateService.isAuthenticated.mockReturnValue(true);
-    mockAuthorizationService.hasAnyRole?.mockReturnValue(false);
+  it('allows navigation if user authenticated but lacks role and already on forbidden URL', async () => {
+    mockAuthStateService.isAuthenticated.mockResolvedValue(true);
+    mockAuthorizationService.hasAnyRole.mockReturnValue(false);
 
-    const requiredRoles = [UserRole.User];
-    const result = runGuard(requiredRoles, `${mockUrlConfigService.forbidden}/page`);
+    const result = await runGuard([UserRole.User], `${mockUrlConfigService.forbidden}/deep`);
 
-    expect(mockAuthorizationService.hasAnyRole).toHaveBeenCalledWith(requiredRoles);
+    expect(mockAuthStateService.isAuthenticated).toHaveBeenCalled();
+    expect(mockAuthorizationService.hasAnyRole).toHaveBeenCalledWith([UserRole.User]);
     expect(mockRouter.createUrlTree).not.toHaveBeenCalled();
     expect(result).toBe(true);
   });
 
-  it('allows navigation if user authenticated and has required roles', () => {
-    mockAuthStateService.isAuthenticated.mockReturnValue(true);
-    mockAuthorizationService.hasAnyRole?.mockReturnValue(true);
+  it('allows navigation if user authenticated and has required roles', async () => {
+    mockAuthStateService.isAuthenticated.mockResolvedValue(true);
+    mockAuthorizationService.hasAnyRole.mockReturnValue(true);
 
-    const requiredRoles = [UserRole.User];
-    const result = runGuard(requiredRoles, '/some-url');
+    const result = await runGuard([UserRole.User], '/some-url');
 
-    expect(mockAuthorizationService.hasAnyRole).toHaveBeenCalledWith(requiredRoles);
+    expect(mockAuthStateService.isAuthenticated).toHaveBeenCalled();
+    expect(mockAuthorizationService.hasAnyRole).toHaveBeenCalledWith([UserRole.User]);
     expect(mockRouter.createUrlTree).not.toHaveBeenCalled();
     expect(result).toBe(true);
   });
 
-  it('allows navigation if  user authenticated and no roles are required', () => {
-    mockAuthStateService.isAuthenticated.mockReturnValue(true);
+  it('allows navigation if user authenticated and no roles are required', async () => {
+    mockAuthStateService.isAuthenticated.mockResolvedValue(true);
 
-    const result = runGuard([], '/some-url');
+    const result = await runGuard([], '/some-url');
 
+    expect(mockAuthStateService.isAuthenticated).toHaveBeenCalled();
     expect(mockAuthorizationService.hasAnyRole).not.toHaveBeenCalled();
     expect(mockRouter.createUrlTree).not.toHaveBeenCalled();
     expect(result).toBe(true);

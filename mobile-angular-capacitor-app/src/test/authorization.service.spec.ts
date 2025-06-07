@@ -1,52 +1,49 @@
 import { TestBed } from '@angular/core/testing';
-import { provideZonelessChangeDetection } from '@angular/core';
 import { AuthorizationService } from '../app/core/services/authorization.service';
 import { AuthenticationService } from '../app/core/services/authentication.service';
+import { UserRole } from '../app/core/enums/user-role';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;
-  let mockAuthStateService: jest.Mocked<AuthenticationService>;
+  let mockAuthService: jest.Mocked<AuthenticationService>;
 
   beforeEach(() => {
-    mockAuthStateService = {
-      userRoles: jest.fn(),
+    mockAuthService = {
+      getAccountRoles: jest.fn(),
     } as unknown as jest.Mocked<AuthenticationService>;
 
     TestBed.configureTestingModule({
       providers: [
         AuthorizationService,
-        { provide: AuthenticationService, useValue: mockAuthStateService },
-        provideZonelessChangeDetection(),
+        { provide: AuthenticationService, useValue: mockAuthService },
       ],
     });
 
     service = TestBed.inject(AuthorizationService);
   });
 
-  it('should return true when user has a specified role', () => {
-    mockAuthStateService.userRoles.mockReturnValue(['TestRole']);
+  it('should return true when user has at least one required role', async () => {
+    mockAuthService.getAccountRoles.mockResolvedValue([UserRole.User, 'Admin']);
 
-    const result = service.hasAnyRole(['TestRole', 'TestRole2']);
+    const result = await service.hasAnyRequiredRole(['Admin', 'Manager']);
 
     expect(result).toBe(true);
-    expect(mockAuthStateService.userRoles).toHaveBeenCalledTimes(1);
+    expect(mockAuthService.getAccountRoles).toHaveBeenCalledTimes(1);
   });
 
-  it('should return false when user has none of the specified roles', () => {
-    mockAuthStateService.userRoles.mockReturnValue(['TestRole']);
+  it('should return false when user has none of the required roles', async () => {
+    mockAuthService.getAccountRoles.mockResolvedValue(['User']);
 
-    const result = service.hasAnyRole(['TestRole2']);
+    const result = await service.hasAnyRequiredRole(['Admin']);
 
     expect(result).toBe(false);
-    expect(mockAuthStateService.userRoles).toHaveBeenCalledTimes(1);
+    expect(mockAuthService.getAccountRoles).toHaveBeenCalledTimes(1);
   });
 
-  it('should return false when hasAnyRole has no determined role', () => {
-    mockAuthStateService.userRoles.mockReturnValue([]);
-
-    const result = service.hasAnyRole([]);
+  it('should return false if no roles are required', async () => {
+    const result = await service.hasAnyRequiredRole([]);
 
     expect(result).toBe(false);
-    expect(mockAuthStateService.userRoles).toHaveBeenCalledTimes(0);
+    expect(mockAuthService.getAccountRoles).not.toHaveBeenCalled();
   });
 });

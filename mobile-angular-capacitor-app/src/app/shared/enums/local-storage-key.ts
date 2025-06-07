@@ -4,4 +4,5 @@
  */
 export enum LocalStorageKey {
   AccountId = 'MyAppPrefix-accountId',
+  AccountRoles = 'MyAppPrefix-accountRoles',
 }

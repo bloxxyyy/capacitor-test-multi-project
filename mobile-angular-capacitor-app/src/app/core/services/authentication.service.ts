@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { UserRole } from '../enums/user-role';
 import { LocalStorageService } from '../../shared/services/local-storage.service';
 import { LocalStorageKey } from '../../shared/enums/local-storage-key';
@@ -9,13 +9,22 @@ import { LocalStorageKey } from '../../shared/enums/local-storage-key';
 export class AuthenticationService {
   private localStorageService = inject(LocalStorageService);
 
-  private userRolesSignal = signal<UserRole[] | string[]>([UserRole.Guest]);
+  async getAccountRoles(): Promise<UserRole[] | string[]> {
+    const rolesJson = await this.localStorageService.getStoredData(LocalStorageKey.AccountRoles);
 
-  get userRoles(): Signal<UserRole[] | string[]> {
-    return this.userRolesSignal.asReadonly();
+    if (!rolesJson) {
+      return [] as UserRole[] | string[];
+    }
+
+    try {
+      return JSON.parse(rolesJson) as UserRole[] | string[];
+    } catch (error) {
+      console.error('Error parsing account roles:', error);
+      return [] as UserRole[] | string[];
+    }
   }
 
-  async isAuthenticated(): Promise<boolean> {
+  async hasAccountId(): Promise<boolean> {
     const accountId = await this.localStorageService.getStoredData(LocalStorageKey.AccountId);
     return !!accountId;
   }
@@ -24,12 +33,18 @@ export class AuthenticationService {
     const testAccountId = 'test-account-id';
 
     await this.localStorageService.setStoredData(LocalStorageKey.AccountId, testAccountId);
-
-    this.userRolesSignal.set(roles);
+    await this.localStorageService.setStoredData(
+      LocalStorageKey.AccountRoles,
+      JSON.stringify(roles)
+    );
   }
 
   async logout(): Promise<void> {
     await this.localStorageService.removeStoredData(LocalStorageKey.AccountId);
-    this.userRolesSignal.set([UserRole.Guest]);
+    await this.localStorageService.removeStoredData(LocalStorageKey.AccountRoles);
+    await this.localStorageService.setStoredData(
+      LocalStorageKey.AccountRoles,
+      JSON.stringify([UserRole.Guest])
+    );
   }
 }

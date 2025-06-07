@@ -13,11 +13,10 @@ export function authorizationGuard(requiredRoles: UserRole[] = []): CanActivateF
     const urlConfigurationService = inject(UrlConfigurationService);
 
     const targetUrl = state.url;
-    const isAuthenticated = await authenticationStateService.isAuthenticated();
+    const isAuthenticated = await authenticationStateService.hasAccountId();
+    const accountAuthenticationUrl = urlConfigurationService.accountAuthentication;
 
     if (!isAuthenticated) {
-      const accountAuthenticationUrl = urlConfigurationService.accountAuthentication;
-
       if (!targetUrl.startsWith(accountAuthenticationUrl)) {
         return router.createUrlTree([accountAuthenticationUrl]);
       }
@@ -25,7 +24,13 @@ export function authorizationGuard(requiredRoles: UserRole[] = []): CanActivateF
       return true;
     }
 
-    if (requiredRoles.length && !authorizationService.hasAnyRole(requiredRoles)) {
+    if (targetUrl.startsWith(accountAuthenticationUrl)) {
+      return router.createUrlTree([urlConfigurationService.accountOverview]);
+    }
+
+    const hasAnyRequiredRole = await authorizationService.hasAnyRequiredRole(requiredRoles);
+
+    if (requiredRoles.length && !hasAnyRequiredRole) {
       const forbiddenUrl = urlConfigurationService.forbidden;
 
       if (!targetUrl.startsWith(forbiddenUrl)) {

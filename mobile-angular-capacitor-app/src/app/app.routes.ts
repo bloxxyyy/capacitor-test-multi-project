@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'account-authentication',
-    canActivate: [authorizationGuard([UserRole.Guest])],
+    canActivate: [authorizationGuard()],
     loadChildren: () =>
       import('./features/account-authentication/account-authentication.routes').then(
         (m) => m.AUTHENTICATION_ROUTES

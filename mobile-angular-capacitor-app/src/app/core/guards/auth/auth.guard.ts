@@ -15,6 +15,8 @@ export function authorizationGuard(requiredRoles: UserRole[] = []): CanActivateF
     const targetUrl = state.url;
     const isAuthenticated = await authenticationStateService.hasAccountId();
     const accountAuthenticationUrl = urlConfigurationService.accountAuthentication;
+    const loginPageUrl = urlConfigurationService.loginPath;
+    const appReopened = await authenticationStateService.isReopenedApp();
 
     if (!isAuthenticated) {
       if (!targetUrl.startsWith(accountAuthenticationUrl)) {
@@ -25,6 +27,14 @@ export function authorizationGuard(requiredRoles: UserRole[] = []): CanActivateF
     }
 
     if (targetUrl.startsWith(accountAuthenticationUrl)) {
+      console.warn('User is already authenticated, redirecting to account overview or login page.');
+      console.warn('Target URL:', targetUrl);
+      console.warn('Login Page URL:', loginPageUrl);
+      console.warn('App Reopened:', appReopened);
+      if (targetUrl === loginPageUrl && appReopened) {
+        return true;
+      }
+      console.warn('Redirecting to account overview.');
       return router.createUrlTree([urlConfigurationService.accountOverview]);
     }
 

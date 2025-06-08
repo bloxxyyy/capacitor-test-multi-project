@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { NativeBiometric } from "@capgo/capacitor-native-biometric";
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { UrlConfigurationService } from '../../../core/config/url-configuration.service';
 
 @Component({
   selector: 'app-authentication-dashboard',
@@ -7,44 +8,15 @@ import { NativeBiometric } from "@capgo/capacitor-native-biometric";
   templateUrl: './authentication-dashboard.component.html',
   styleUrl: './authentication-dashboard.component.scss',
 })
-export class AuthenticationDashboardComponent implements OnInit {
+export class AuthenticationDashboardComponent {
+  private router = inject(Router);
+  private urlConfig = inject(UrlConfigurationService);
 
-  ngOnInit(): void {
-    this.performBiometricVerification();
+  navigateToCreateAccount(): void {
+    this.router.navigateByUrl(this.urlConfig.createAccountPath);
   }
 
-  async performBiometricVerification() {
-    const result = await NativeBiometric.isAvailable();
-
-    if(!result.isAvailable) return;
-
-    //const isFaceID = result.biometryType == BiometryType.FACE_ID;
-
-    const verified = await NativeBiometric.verifyIdentity({
-      reason: "For easy log in",
-      title: "Log in",
-      subtitle: "Maybe add subtitle here?",
-      description: "Maybe a description too?",
-    })
-      .then(() => true)
-      .catch(() => false);
-
-    if(!verified) return;
-
-    NativeBiometric.setCredentials({
-      username: "usernameTest",
-      password: "passwordTest",
-      server: "www.example.com",
-    }).then();
-
-    const credentials = await NativeBiometric.getCredentials({
-      server: "www.example.com",
-    });
-
-    console.log('Biometric credentials:', credentials);
-
-    //await this.router.navigate(['/login']);
-
+  navigateToLogin(): void {
+    this.router.navigateByUrl(this.urlConfig.loginPath);
   }
-
 }

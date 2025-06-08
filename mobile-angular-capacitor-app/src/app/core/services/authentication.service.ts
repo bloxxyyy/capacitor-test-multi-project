@@ -9,6 +9,16 @@ import { LocalStorageKey } from '../../shared/enums/local-storage-key';
 export class AuthenticationService {
   private localStorageService = inject(LocalStorageService);
 
+  async isReopenedApp(): Promise<boolean> {
+    const data = await this.localStorageService.getStoredData(LocalStorageKey.OnReopen);
+    return data === 'true';
+  }
+
+  async hasBiometricEnabled(): Promise<boolean> {
+    const data = await this.localStorageService.getStoredData(LocalStorageKey.HasBiometricEnabled);
+    return data === 'true';
+  }
+
   async getAccountRoles(): Promise<UserRole[] | string[]> {
     const rolesJson = await this.localStorageService.getStoredData(LocalStorageKey.AccountRoles);
 
@@ -29,9 +39,24 @@ export class AuthenticationService {
     return !!accountId;
   }
 
-  async login(roles: UserRole[] = [UserRole.User]): Promise<void> {
-    const testAccountId = 'test-account-id';
+  async login(
+    _pin: string,
+    hasBiometricEnabled: boolean,
+    roles: UserRole[] = [UserRole.User]
+  ): Promise<void> {
+    await this.localStorageService.setStoredData(
+      LocalStorageKey.HasBiometricEnabled,
+      hasBiometricEnabled.toString()
+    );
+    await this.localStorageService.setStoredData(LocalStorageKey.OnReopen, 'false');
 
+    // If we already had an account, as in we only wanted to go through biometrics - we wont need a new accountId.
+    const accountId = await this.localStorageService.getStoredData(LocalStorageKey.AccountId);
+    if (accountId) {
+      return;
+    }
+
+    const testAccountId = 'test-account-id';
     await this.localStorageService.setStoredData(LocalStorageKey.AccountId, testAccountId);
     await this.localStorageService.setStoredData(
       LocalStorageKey.AccountRoles,
@@ -42,6 +67,7 @@ export class AuthenticationService {
   async logout(): Promise<void> {
     await this.localStorageService.removeStoredData(LocalStorageKey.AccountId);
     await this.localStorageService.removeStoredData(LocalStorageKey.AccountRoles);
+
     await this.localStorageService.setStoredData(
       LocalStorageKey.AccountRoles,
       JSON.stringify([UserRole.Guest])

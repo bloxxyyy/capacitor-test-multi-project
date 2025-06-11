@@ -12,11 +12,11 @@ export class AuthenticationDashboardComponent {
   private router = inject(Router);
   private urlConfig = inject(UrlConfigurationService);
 
-  navigateToCreateAccount(): void {
-    this.router.navigateByUrl(this.urlConfig.createAccountPath);
+  async navigateToCreateAccount(): Promise<void> {
+    await this.router.navigateByUrl(this.urlConfig.createAccountPath);
   }
 
-  navigateToLogin(): void {
-    this.router.navigateByUrl(this.urlConfig.loginPath);
+  async navigateToLogin(): Promise<void> {
+    await this.router.navigateByUrl(this.urlConfig.loginPath);
   }
 }

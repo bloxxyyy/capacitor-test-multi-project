@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { UrlConfigurationService } from '../../../core/config/url-configuration.service';
 import { UserRole } from '../../../core/enums/user-role';
+import { NativeBiometric } from '@capgo/capacitor-native-biometric';
 
 @Component({
   selector: 'app-login',
@@ -21,9 +22,30 @@ export class LoginComponent implements OnInit {
     const isReopenedApp = await this.authenticationService.isReopenedApp();
 
     if (hasAccountId && hasBiometricEnabled && isReopenedApp) {
-      console.log('Biometric login is enabled, logging in automatically...');
-      await this.onLogin();
+
+      const isVerifiedWithBiometrics = await this.tryVerifyWithBiometrics();
+      if (isVerifiedWithBiometrics) {
+        await this.onLogin();
+      }
+
     }
+  }
+
+   async tryVerifyWithBiometrics() : Promise<boolean> {
+    const result = await NativeBiometric.isAvailable();
+
+    if(!result.isAvailable) return false;
+
+    const verified = await NativeBiometric.verifyIdentity({
+      title: "Verify Identity",
+      useFallback: true,
+      maxAttempts: 3,
+    })
+      .then(() => true)
+      .catch(() => false);
+
+    if(!verified) return false;
+    return true;
   }
 
   async onLogin(): Promise<void> {

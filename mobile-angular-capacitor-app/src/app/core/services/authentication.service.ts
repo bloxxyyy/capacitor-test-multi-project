@@ -44,10 +44,12 @@ export class AuthenticationService {
     hasBiometricEnabled: boolean,
     roles: UserRole[] = [UserRole.User]
   ): Promise<void> {
+
     await this.localStorageService.setStoredData(
       LocalStorageKey.HasBiometricEnabled,
       hasBiometricEnabled.toString()
     );
+
     await this.localStorageService.setStoredData(LocalStorageKey.OnReopen, 'false');
 
     // If we already had an account, as in we only wanted to go through biometrics - we wont need a new accountId.

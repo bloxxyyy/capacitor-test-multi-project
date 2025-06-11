@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { AuthorizationService } from '../app/core/services/authorization.service';
 import { AuthenticationService } from '../app/core/services/authentication.service';
 import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
-import { authorizationGuard } from '../app/core/guards/auth/auth.guard';
+import { requiresAuthenticationGuard } from '../app/core/guards/authentication/requires-authentication.guard';
 
 describe('authorizationGuard', () => {
   let mockAuthStateService: jest.Mocked<AuthenticationService>;
@@ -43,7 +43,7 @@ describe('authorizationGuard', () => {
   });
 
   async function runGuard(requiredRoles: UserRole[] = [], currentUrl = '/some-url') {
-    const guard = authorizationGuard(requiredRoles);
+    const guard = requiresAuthenticationGuard(requiredRoles);
     const fakeRoute = {} as ActivatedRouteSnapshot;
     const fakeState = { url: currentUrl } as RouterStateSnapshot;
     return await TestBed.runInInjectionContext(() => guard(fakeRoute, fakeState));

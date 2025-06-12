@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   private biometricsService = inject(BiometricsService);
 
   ngOnInit() {
-    this.biometricsService.setAppResumedFromBackground();
+    this.biometricsService.appResumedFromBackground();
 
     this.lifecycleService.lifecycle$
       .pipe(filter((event) => event === 'foreground'))
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
         const hasAccountId = await this.accountService.hasAccountId();
 
         if (hasAccountId) {
-          this.biometricsService.setAppResumedFromBackground();
+          this.biometricsService.appResumedFromBackground();
           const loginUrl = this.urlConfig.loginPath;
           await this.router.navigate([loginUrl]);
         }

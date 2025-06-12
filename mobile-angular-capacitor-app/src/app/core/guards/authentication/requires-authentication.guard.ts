@@ -8,22 +8,22 @@ import { BiometricsService } from '../../services/biometrics.service';
 
 export function requiresAuthenticationGuard(requiredRoles: UserRole[] = []): CanActivateFn {
   return async () => {
-    const authenticationStateService = inject(AccountIdRepository);
-    const authorizationService = inject(AccountRolesRepository);
+    const accountIdRepo = inject(AccountIdRepository);
+    const accountRolesRepo = inject(AccountRolesRepository);
     const router = inject(Router);
     const urlConfigurationService = inject(UrlConfigurationService);
     const biometricsService = inject(BiometricsService);
 
     // First check if we already made an account, else we always have to login or create and account first.
-    const hasAccountId = await authenticationStateService.hasAccountId();
+    const hasAccountId = await accountIdRepo.hasAccountId();
     if (!hasAccountId) {
       const accountAuthenticationUrl = urlConfigurationService.accountAuthentication;
       return router.createUrlTree([accountAuthenticationUrl]);
     }
 
     // Next check if we have done biometrics for this openedAndForground app session
-    const appReopened = biometricsService.isAppResumedFromBackground();
-    if (appReopened) {
+    const appResumedFromBackground = biometricsService.isAppResumedFromBackground();
+    if (appResumedFromBackground) {
       const loginUrl = urlConfigurationService.loginPath;
       return router.createUrlTree([loginUrl]);
     }
@@ -32,7 +32,7 @@ export function requiresAuthenticationGuard(requiredRoles: UserRole[] = []): Can
     if (requiredRoles.length < 1) return true;
 
     // Next check if we have the required roles to go to this component
-    const hasAnyRequiredRole = await authorizationService.hasAnyRequiredRole(requiredRoles);
+    const hasAnyRequiredRole = await accountRolesRepo.hasAnyRequiredRole(requiredRoles);
 
     if (!hasAnyRequiredRole) {
       const forbiddenUrl = urlConfigurationService.forbidden;

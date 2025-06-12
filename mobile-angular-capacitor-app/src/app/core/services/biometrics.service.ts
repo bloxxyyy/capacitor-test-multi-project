@@ -1,24 +1,21 @@
 import { computed, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { LocalStorageKey } from '../../shared/enums/local-storage-key';
 import { NativeBiometric } from '@capgo/capacitor-native-biometric';
+import { AccountBiometricsRepository } from '../repositories/accountBiometrics.repository';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BiometricsService {
-  private localStorageService = inject(LocalStorageService);
-
-  private _hasBiometricsEnabled: boolean | null = null;
+  private accountBiometricsRepository = inject(AccountBiometricsRepository);
 
   private readonly _appResumedFromBackground: WritableSignal<boolean> = signal(false);
   public readonly isAppResumedFromBackground: Signal<boolean> = computed(() =>
     this._appResumedFromBackground()
   );
 
-  async enableUseOfBiometrics(): Promise<void> {
-    this._hasBiometricsEnabled = true;
-    await this.localStorageService.setStoredData(LocalStorageKey.HasBiometricEnabled, 'true');
+  appResumedFromBackground(): void {
+    // add a routing here to go back to last page when done.
+    this._appResumedFromBackground.set(true);
   }
 
   async tryVerifyWithBiometrics(): Promise<boolean> {
@@ -39,21 +36,15 @@ export class BiometricsService {
     return true;
   }
 
+  async enableUseOfBiometrics(): Promise<void> {
+    await this.accountBiometricsRepository.enableUseOfBiometrics();
+  }
+
   async hasBiometricEnabled(): Promise<boolean> {
-    if (this._hasBiometricsEnabled !== null) {
-      return this._hasBiometricsEnabled;
-    }
+    return await this.accountBiometricsRepository.getBiometricsEnabled();
+  }
 
-    const data: string | null = await this.localStorageService.getStoredData(
-      LocalStorageKey.HasBiometricEnabled
-    );
-
-    if (data === null) {
-      this._hasBiometricsEnabled = false;
-      return this._hasBiometricsEnabled;
-    }
-
-    this._hasBiometricsEnabled = data === 'true';
-    return this._hasBiometricsEnabled;
+  async disableUseOfBiometrics(): Promise<void> {
+    await this.accountBiometricsRepository.disableUseOfBiometrics();
   }
 }

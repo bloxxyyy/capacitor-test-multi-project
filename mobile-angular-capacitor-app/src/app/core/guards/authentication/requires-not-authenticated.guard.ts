@@ -1,11 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication.service';
+import { AccountService } from '../../services/account.service';
 import { UrlConfigurationService } from '../../config/url-configuration.service';
 
 export function requiresNotAuthenticatedGuard(): CanActivateFn {
   return async (_route) => {
-    const authenticationStateService = inject(AuthenticationService);
+    const authenticationStateService = inject(AccountService);
     const router = inject(Router);
     const urlConfigurationService = inject(UrlConfigurationService);
 

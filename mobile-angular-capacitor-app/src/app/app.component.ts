@@ -3,9 +3,10 @@ import { Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { UrlConfigurationService } from './core/config/url-configuration.service';
 import { AppLifecycleService } from './core/services/app-lifecycle.service';
-import { AuthenticationService } from './core/services/authentication.service';
+import { AccountService } from './core/services/account.service';
 import { LocalStorageKey } from './shared/enums/local-storage-key';
 import { LocalStorageService } from './shared/services/local-storage.service';
+import { BiometricsService } from './core/services/biometrics.service';
 
 @Component({
   selector: 'app-root',
@@ -15,19 +16,19 @@ import { LocalStorageService } from './shared/services/local-storage.service';
 })
 export class AppComponent implements OnInit {
   private lifecycleService = inject(AppLifecycleService);
-  private authService = inject(AuthenticationService);
+  private authService = inject(AccountService);
   private urlConfig = inject(UrlConfigurationService);
-  private localStorage = inject(LocalStorageService);
   private router = inject(Router);
+   private biometricsService = inject(BiometricsService);
 
   ngOnInit() {
     this.lifecycleService.lifecycle$
-      .pipe(filter(event => event === 'foreground' || event === 'startup'))
+      .pipe(filter(event => event === 'foreground'))
       .subscribe(async () => {
         const hasAccountId = await this.authService.hasAccountId();
 
         if (hasAccountId) {
-          await this.localStorage.setStoredData(LocalStorageKey.OnReopen, 'true');
+          this.biometricsService.setAppBackOnForeground();
           const loginUrl = this.urlConfig.loginPath;
           await this.router.navigate([loginUrl]);
         }

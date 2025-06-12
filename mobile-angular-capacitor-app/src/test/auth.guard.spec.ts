@@ -2,12 +2,12 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@a
 import { UserRole } from '../app/core/enums/user-role';
 import { TestBed } from '@angular/core/testing';
 import { AuthorizationService } from '../app/core/services/authorization.service';
-import { AuthenticationService } from '../app/core/services/authentication.service';
+import { AccountService } from '../app/core/services/account.service';
 import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
 import { requiresAuthenticationGuard } from '../app/core/guards/authentication/requires-authentication.guard';
 
 describe('authorizationGuard', () => {
-  let mockAuthStateService: jest.Mocked<AuthenticationService>;
+  let mockAuthStateService: jest.Mocked<AccountService>;
   let mockAuthorizationService: jest.Mocked<AuthorizationService>;
   let mockRouter: jest.Mocked<Router>;
   let mockUrlConfigService: jest.Mocked<UrlConfigurationService>;
@@ -17,7 +17,7 @@ describe('authorizationGuard', () => {
       isAuthenticated: jest.fn(),
       hasAccountId: jest.fn(),
       hasAccountRoles: jest.fn(),
-    } as unknown as jest.Mocked<AuthenticationService>;
+    } as unknown as jest.Mocked<AccountService>;
 
     mockAuthorizationService = {
       hasAnyRequiredRole: jest.fn(),
@@ -34,7 +34,7 @@ describe('authorizationGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthenticationService, useValue: mockAuthStateService },
+        { provide: AccountService, useValue: mockAuthStateService },
         { provide: AuthorizationService, useValue: mockAuthorizationService },
         { provide: Router, useValue: mockRouter },
         { provide: UrlConfigurationService, useValue: mockUrlConfigService },

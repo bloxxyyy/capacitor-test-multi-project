@@ -6,51 +6,17 @@ import { LocalStorageKey } from '../../shared/enums/local-storage-key';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationService {
+export class AccountService {
   private localStorageService = inject(LocalStorageService);
-
-  async isReopenedApp(): Promise<boolean> {
-    const data = await this.localStorageService.getStoredData(LocalStorageKey.OnReopen);
-    return data === 'true';
-  }
-
-  async hasBiometricEnabled(): Promise<boolean> {
-    const data = await this.localStorageService.getStoredData(LocalStorageKey.HasBiometricEnabled);
-    return data === 'true';
-  }
-
-  async getAccountRoles(): Promise<UserRole[] | string[]> {
-    const rolesJson = await this.localStorageService.getStoredData(LocalStorageKey.AccountRoles);
-
-    if (!rolesJson) {
-      return [] as UserRole[] | string[];
-    }
-
-    try {
-      return JSON.parse(rolesJson) as UserRole[] | string[];
-    } catch (error) {
-      console.error('Error parsing account roles:', error);
-      return [] as UserRole[] | string[];
-    }
-  }
 
   async hasAccountId(): Promise<boolean> {
     const accountId = await this.localStorageService.getStoredData(LocalStorageKey.AccountId);
     return !!accountId;
   }
 
-  async login(
-    _pin: string,
-    hasBiometricEnabled: boolean,
+  async setAccount(
     roles: UserRole[] = [UserRole.User]
   ): Promise<void> {
-
-    await this.localStorageService.setStoredData(
-      LocalStorageKey.HasBiometricEnabled,
-      hasBiometricEnabled.toString()
-    );
-
-    await this.localStorageService.setStoredData(LocalStorageKey.OnReopen, 'false');
 
     // If we already had an account, as in we only wanted to go through biometrics - we wont need a new accountId.
     const accountId = await this.localStorageService.getStoredData(LocalStorageKey.AccountId);
@@ -66,7 +32,7 @@ export class AuthenticationService {
     );
   }
 
-  async logout(): Promise<void> {
+  async unsetAccount(): Promise<void> {
     await this.localStorageService.removeStoredData(LocalStorageKey.AccountId);
     await this.localStorageService.removeStoredData(LocalStorageKey.AccountRoles);
 

@@ -16,10 +16,6 @@ export class AppLifecycleService {
   }
 
   private registerListeners() {
-    App.getLaunchUrl().then(() => {
-      this.lifecycleSubject.next('startup');
-    });
-
     App.addListener('appStateChange', (state: AppState) => {
       this.lifecycleSubject.next(state.isActive ? 'foreground' : 'background');
     });

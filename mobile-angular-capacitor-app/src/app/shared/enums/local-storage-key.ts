@@ -4,7 +4,6 @@
  */
 export enum LocalStorageKey {
   HasBiometricEnabled = 'MyAppPrefix-hasBiometricEnabled',
-  OnReopen = 'MyAppPrefix-biometric',
   AccountId = 'MyAppPrefix-accountId',
   AccountRoles = 'MyAppPrefix-accountRoles',
 }

@@ -1,22 +1,22 @@
 import { TestBed } from '@angular/core/testing';
-import { AuthorizationService } from '../app/core/services/authorization.service';
-import { AccountService } from '../app/core/services/account.service';
+import { AccountRolesRepository } from '../app/core/repositories/accountRoles.repository';
+import { AccountIdRepository } from '../app/core/repositories/accountId.repository';
 import { UserRole } from '../app/core/enums/user-role';
 
 describe('AuthorizationService', () => {
-  let service: AuthorizationService;
-  let mockAuthService: jest.Mocked<AccountService>;
+  let service: AccountRolesRepository;
+  let mockAuthService: jest.Mocked<AccountIdRepository>;
 
   beforeEach(() => {
     mockAuthService = {
       getAccountRoles: jest.fn(),
-    } as unknown as jest.Mocked<AccountService>;
+    } as unknown as jest.Mocked<AccountIdRepository>;
 
     TestBed.configureTestingModule({
-      providers: [AuthorizationService, { provide: AccountService, useValue: mockAuthService }],
+      providers: [AccountRolesRepository, { provide: AccountIdRepository, useValue: mockAuthService }],
     });
 
-    service = TestBed.inject(AuthorizationService);
+    service = TestBed.inject(AccountRolesRepository);
   });
 
   it('should return true when user has at least one required role', async () => {

@@ -1,14 +1,14 @@
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { UserRole } from '../app/core/enums/user-role';
 import { TestBed } from '@angular/core/testing';
-import { AuthorizationService } from '../app/core/services/authorization.service';
-import { AccountService } from '../app/core/services/account.service';
+import { AccountRolesRepository } from '../app/core/repositories/accountRoles.repository';
+import { AccountIdRepository } from '../app/core/repositories/accountId.repository';
 import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
 import { requiresAuthenticationGuard } from '../app/core/guards/authentication/requires-authentication.guard';
 
 describe('authorizationGuard', () => {
-  let mockAuthStateService: jest.Mocked<AccountService>;
-  let mockAuthorizationService: jest.Mocked<AuthorizationService>;
+  let mockAuthStateService: jest.Mocked<AccountIdRepository>;
+  let mockAuthorizationService: jest.Mocked<AccountRolesRepository>;
   let mockRouter: jest.Mocked<Router>;
   let mockUrlConfigService: jest.Mocked<UrlConfigurationService>;
 
@@ -17,11 +17,11 @@ describe('authorizationGuard', () => {
       isAuthenticated: jest.fn(),
       hasAccountId: jest.fn(),
       hasAccountRoles: jest.fn(),
-    } as unknown as jest.Mocked<AccountService>;
+    } as unknown as jest.Mocked<AccountIdRepository>;
 
     mockAuthorizationService = {
       hasAnyRequiredRole: jest.fn(),
-    } as unknown as jest.Mocked<AuthorizationService>;
+    } as unknown as jest.Mocked<AccountRolesRepository>;
 
     mockRouter = {
       createUrlTree: jest.fn(),
@@ -34,8 +34,8 @@ describe('authorizationGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AccountService, useValue: mockAuthStateService },
-        { provide: AuthorizationService, useValue: mockAuthorizationService },
+        { provide: AccountIdRepository, useValue: mockAuthStateService },
+        { provide: AccountRolesRepository, useValue: mockAuthorizationService },
         { provide: Router, useValue: mockRouter },
         { provide: UrlConfigurationService, useValue: mockUrlConfigService },
       ],

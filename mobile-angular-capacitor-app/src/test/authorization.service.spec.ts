@@ -13,7 +13,10 @@ describe('AuthorizationService', () => {
     } as unknown as jest.Mocked<AccountIdRepository>;
 
     TestBed.configureTestingModule({
-      providers: [AccountRolesRepository, { provide: AccountIdRepository, useValue: mockAuthService }],
+      providers: [
+        AccountRolesRepository,
+        { provide: AccountIdRepository, useValue: mockAuthService },
+      ],
     });
 
     service = TestBed.inject(AccountRolesRepository);

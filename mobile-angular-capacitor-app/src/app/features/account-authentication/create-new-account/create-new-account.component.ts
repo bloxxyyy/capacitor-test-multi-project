@@ -21,7 +21,7 @@ export class CreateNewAccountComponent {
 
   async onCreateAccount(): Promise<void> {
     await this.biometricsService.enableUseOfBiometrics();
-    await this.accountIdRepo.setAccount("new-account-id");
+    await this.accountIdRepo.setAccount('new-account-id');
     await this.accountRoleRepo.setAccountRoles([UserRole.User]);
     await this.router.navigate([this.urlConfig.accountOverview]);
   }

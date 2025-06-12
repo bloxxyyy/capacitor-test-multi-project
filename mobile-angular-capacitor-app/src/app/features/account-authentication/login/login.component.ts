@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   async onLogin(): Promise<void> {
-    await this.accountIdRepo.setAccount("test-account-id");
+    await this.accountIdRepo.setAccount('test-account-id');
     await this.accountRoleRepo.setAccountRoles([UserRole.User]);
     await this.router.navigate([this.urlConfig.accountOverview]);
   }

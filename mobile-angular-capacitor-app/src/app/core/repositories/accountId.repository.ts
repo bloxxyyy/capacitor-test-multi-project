@@ -6,7 +6,6 @@ import { LocalStorageKey } from '../../shared/enums/local-storage-key';
   providedIn: 'root',
 })
 export class AccountIdRepository {
-
   private localStorageService = inject(LocalStorageService);
 
   private _accountId: string | null = null;
@@ -17,7 +16,6 @@ export class AccountIdRepository {
   }
 
   async setAccount(id: string): Promise<void> {
-
     if (await this.hasAccountId()) {
       await this.unsetAccount();
     }

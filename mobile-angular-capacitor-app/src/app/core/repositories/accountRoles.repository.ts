@@ -7,13 +7,11 @@ import { LocalStorageKey } from '../../shared/enums/local-storage-key';
   providedIn: 'root',
 })
 export class AccountRolesRepository {
-
   private localStorageService = inject(LocalStorageService);
 
   private _accountRoles: UserRole[] | null = null;
 
   async setAccountRoles(userRoles: UserRole[]) {
-
     if ((await this.getAccountRoles()).length > 0) {
       await this.unsetAccountRoles();
     }
@@ -52,6 +50,7 @@ export class AccountRolesRepository {
       this._accountRoles = JSON.parse(rolesJson) as UserRole[];
       return this._accountRoles;
     } catch (error) {
+      console.error('Failed to parse account roles from storage:', error);
       this._accountRoles = [];
       return this._accountRoles;
     }

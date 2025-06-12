@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { UrlConfigurationService } from './core/config/url-configuration.service';
 import { AppLifecycleService } from './core/services/app-lifecycle.service';
-import { AccountService } from './core/services/account.service';
+import { AccountIdRepository } from './core/repositories/accountId.repository';
 import { BiometricsService } from './core/services/biometrics.service';
 
 @Component({
@@ -14,13 +14,13 @@ import { BiometricsService } from './core/services/biometrics.service';
 })
 export class AppComponent implements OnInit {
   private lifecycleService = inject(AppLifecycleService);
-  private accountService = inject(AccountService);
+  private accountService = inject(AccountIdRepository);
   private urlConfig = inject(UrlConfigurationService);
   private router = inject(Router);
   private biometricsService = inject(BiometricsService);
 
   ngOnInit() {
-    this.biometricsService.setAppBackOnForeground();
+    this.biometricsService.setAppResumedFromBackground();
 
     this.lifecycleService.lifecycle$
       .pipe(filter((event) => event === 'foreground'))
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
         const hasAccountId = await this.accountService.hasAccountId();
 
         if (hasAccountId) {
-          this.biometricsService.setAppBackOnForeground();
+          this.biometricsService.setAppResumedFromBackground();
           const loginUrl = this.urlConfig.loginPath;
           await this.router.navigate([loginUrl]);
         }

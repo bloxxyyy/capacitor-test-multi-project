@@ -1,15 +1,15 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { UserRole } from '../../enums/user-role';
-import { AuthorizationService } from '../../services/authorization.service';
+import { AccountRolesRepository } from '../../repositories/accountRoles.repository';
 import { UrlConfigurationService } from '../../config/url-configuration.service';
-import { AccountService } from '../../services/account.service';
+import { AccountIdRepository } from '../../repositories/accountId.repository';
 import { BiometricsService } from '../../services/biometrics.service';
 
 export function requiresAuthenticationGuard(requiredRoles: UserRole[] = []): CanActivateFn {
   return async () => {
-    const authenticationStateService = inject(AccountService);
-    const authorizationService = inject(AuthorizationService);
+    const authenticationStateService = inject(AccountIdRepository);
+    const authorizationService = inject(AccountRolesRepository);
     const router = inject(Router);
     const urlConfigurationService = inject(UrlConfigurationService);
     const biometricsService = inject(BiometricsService);
@@ -22,7 +22,7 @@ export function requiresAuthenticationGuard(requiredRoles: UserRole[] = []): Can
     }
 
     // Next check if we have done biometrics for this openedAndForground app session
-    const appReopened = biometricsService.isAppBackOnForeground();
+    const appReopened = biometricsService.isAppResumedFromBackground();
     if (appReopened) {
       const loginUrl = urlConfigurationService.loginPath;
       return router.createUrlTree([loginUrl]);

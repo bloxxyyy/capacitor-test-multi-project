@@ -11,15 +11,10 @@ export class BiometricsService {
 
   private _hasBiometricsEnabled: boolean | null = null;
 
-  private readonly _isAppBackOnForeground: WritableSignal<boolean> = signal(false);
-  public readonly isAppBackOnForeground: Signal<boolean> = computed(() =>
-    this._isAppBackOnForeground()
+  private readonly _appResumedFromBackground: WritableSignal<boolean> = signal(false);
+  public readonly isAppResumedFromBackground: Signal<boolean> = computed(() =>
+    this._appResumedFromBackground()
   );
-
-  setAppBackOnForeground(): void {
-    // add a routing here to go back to last page when done.
-    this._isAppBackOnForeground.set(true);
-  }
 
   async enableUseOfBiometrics(): Promise<void> {
     this._hasBiometricsEnabled = true;
@@ -40,7 +35,7 @@ export class BiometricsService {
       .catch(() => false);
 
     if (!verified) return false;
-    this._isAppBackOnForeground.set(false);
+    this._appResumedFromBackground.set(false);
     return true;
   }
 

@@ -2,8 +2,9 @@ import { Component, inject } from '@angular/core';
 import { BiometricsService } from '../../../core/services/biometrics.service';
 import { UrlConfigurationService } from '../../../core/config/url-configuration.service';
 import { Router } from '@angular/router';
+import { AccountIdRepository } from '../../../core/repositories/accountId.repository';
+import { AccountRolesRepository } from '../../../core/repositories/accountRoles.repository';
 import { UserRole } from '../../../core/enums/user-role';
-import { AccountService } from '../../../core/services/account.service';
 
 @Component({
   selector: 'app-create-new-account',
@@ -15,11 +16,13 @@ export class CreateNewAccountComponent {
   private biometricsService = inject(BiometricsService);
   private router = inject(Router);
   private urlConfig = inject(UrlConfigurationService);
-  private accountService = inject(AccountService);
+  private accountIdRepo = inject(AccountIdRepository);
+  private accountRoleRepo = inject(AccountRolesRepository);
 
   async onCreateAccount(): Promise<void> {
     await this.biometricsService.enableUseOfBiometrics();
-    await this.accountService.setAccount([UserRole.User]);
+    await this.accountIdRepo.setAccount("new-account-id");
+    await this.accountRoleRepo.setAccountRoles([UserRole.User]);
     await this.router.navigate([this.urlConfig.accountOverview]);
   }
 }

@@ -4,8 +4,6 @@ import { filter } from 'rxjs';
 import { UrlConfigurationService } from './core/config/url-configuration.service';
 import { AppLifecycleService } from './core/services/app-lifecycle.service';
 import { AccountService } from './core/services/account.service';
-import { LocalStorageKey } from './shared/enums/local-storage-key';
-import { LocalStorageService } from './shared/services/local-storage.service';
 import { BiometricsService } from './core/services/biometrics.service';
 
 @Component({
@@ -16,16 +14,18 @@ import { BiometricsService } from './core/services/biometrics.service';
 })
 export class AppComponent implements OnInit {
   private lifecycleService = inject(AppLifecycleService);
-  private authService = inject(AccountService);
+  private accountService = inject(AccountService);
   private urlConfig = inject(UrlConfigurationService);
   private router = inject(Router);
-   private biometricsService = inject(BiometricsService);
+  private biometricsService = inject(BiometricsService);
 
   ngOnInit() {
+    this.biometricsService.setAppBackOnForeground();
+
     this.lifecycleService.lifecycle$
-      .pipe(filter(event => event === 'foreground'))
+      .pipe(filter((event) => event === 'foreground'))
       .subscribe(async () => {
-        const hasAccountId = await this.authService.hasAccountId();
+        const hasAccountId = await this.accountService.hasAccountId();
 
         if (hasAccountId) {
           this.biometricsService.setAppBackOnForeground();

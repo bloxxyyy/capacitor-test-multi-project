@@ -11,17 +11,12 @@ export const routes: Routes = [
   {
     path: 'account-authentication',
     loadChildren: () =>
-      import('./account-authentication.routes').then(
-        (m) => m.AUTHENTICATION_ROUTES
-      ),
+      import('./account-authentication.routes').then((m) => m.AUTHENTICATION_ROUTES),
   },
   {
     path: 'account-overview',
     canActivate: [requiresAuthenticationGuard([UserRole.User])],
-    loadChildren: () =>
-      import('./account-overview.routes').then(
-        (m) => m.ACCOUNT_OVERVIEW_ROUTES
-      ),
+    loadChildren: () => import('./account-overview.routes').then((m) => m.ACCOUNT_OVERVIEW_ROUTES),
   },
   {
     path: 'forbidden',

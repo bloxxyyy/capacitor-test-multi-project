@@ -14,10 +14,7 @@ export class AccountService {
     return !!accountId;
   }
 
-  async setAccount(
-    roles: UserRole[] = [UserRole.User]
-  ): Promise<void> {
-
+  async setAccount(roles: UserRole[] = [UserRole.User]): Promise<void> {
     // If we already had an account, as in we only wanted to go through biometrics - we wont need a new accountId.
     const accountId = await this.localStorageService.getStoredData(LocalStorageKey.AccountId);
     if (accountId) {

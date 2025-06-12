@@ -7,7 +7,6 @@ import { LocalStorageKey } from '../../shared/enums/local-storage-key';
   providedIn: 'root',
 })
 export class AuthorizationService {
-
   private localStorageService = inject(LocalStorageService);
 
   async getAccountRoles(): Promise<UserRole[] | string[]> {

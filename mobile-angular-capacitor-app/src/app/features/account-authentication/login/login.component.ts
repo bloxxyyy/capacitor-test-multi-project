@@ -23,12 +23,10 @@ export class LoginComponent implements OnInit {
     const isReopenedApp = this.biometricsService.isAppBackOnForeground();
 
     if (hasAccountId && hasBiometricEnabled && isReopenedApp) {
-
       const isVerifiedWithBiometrics = await this.biometricsService.tryVerifyWithBiometrics();
       if (isVerifiedWithBiometrics) {
         await this.onLogin();
       }
-
     }
   }
 

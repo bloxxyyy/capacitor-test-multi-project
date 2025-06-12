@@ -7,7 +7,7 @@ import { AccountService } from '../../services/account.service';
 import { BiometricsService } from '../../services/biometrics.service';
 
 export function requiresAuthenticationGuard(requiredRoles: UserRole[] = []): CanActivateFn {
-  return async (_route) => {
+  return async () => {
     const authenticationStateService = inject(AccountService);
     const authorizationService = inject(AuthorizationService);
     const router = inject(Router);
@@ -30,7 +30,6 @@ export function requiresAuthenticationGuard(requiredRoles: UserRole[] = []): Can
 
     // Next check if there are roles required
     if (requiredRoles.length < 1) return true;
-
 
     // Next check if we have the required roles to go to this component
     const hasAnyRequiredRole = await authorizationService.hasAnyRequiredRole(requiredRoles);

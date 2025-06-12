@@ -10,7 +10,6 @@ import { AccountService } from '../../../core/services/account.service';
   styleUrl: './account-overview-dashboard.component.scss',
 })
 export class AccountOverviewDashboardComponent {
-
   private accountService = inject(AccountService);
   private router = inject(Router);
   private urlConfig = inject(UrlConfigurationService);

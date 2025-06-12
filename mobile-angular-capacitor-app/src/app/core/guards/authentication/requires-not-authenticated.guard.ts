@@ -4,7 +4,7 @@ import { AccountService } from '../../services/account.service';
 import { UrlConfigurationService } from '../../config/url-configuration.service';
 
 export function requiresNotAuthenticatedGuard(): CanActivateFn {
-  return async (_route) => {
+  return async () => {
     const authenticationStateService = inject(AccountService);
     const router = inject(Router);
     const urlConfigurationService = inject(UrlConfigurationService);

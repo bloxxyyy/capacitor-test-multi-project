@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 export type AppLifecycleEvent = 'startup' | 'foreground' | 'background';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppLifecycleService {
   private lifecycleSubject = new BehaviorSubject<AppLifecycleEvent>('startup');

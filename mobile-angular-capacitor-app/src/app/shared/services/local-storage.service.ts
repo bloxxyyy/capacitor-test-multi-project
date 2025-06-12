@@ -8,7 +8,7 @@ import { LocalStorageKey } from '../enums/local-storage-key';
 export class LocalStorageService {
   async setStoredData(key: LocalStorageKey | string, value: string): Promise<void> {
     if (!key) return;
-    await Preferences.remove({ key })
+    await Preferences.remove({ key });
     await Preferences.set({ key, value });
   }
 

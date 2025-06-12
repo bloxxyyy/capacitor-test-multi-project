@@ -12,13 +12,12 @@ import { AccountService } from '../../../core/services/account.service';
   styleUrl: './create-new-account.component.scss',
 })
 export class CreateNewAccountComponent {
-
   private biometricsService = inject(BiometricsService);
   private router = inject(Router);
   private urlConfig = inject(UrlConfigurationService);
   private accountService = inject(AccountService);
 
-  async onCreateAccount() : Promise<void> {
+  async onCreateAccount(): Promise<void> {
     await this.biometricsService.enableUseOfBiometrics();
     await this.accountService.setAccount([UserRole.User]);
     await this.router.navigate([this.urlConfig.accountOverview]);

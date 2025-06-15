@@ -1,10 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { filter } from 'rxjs';
-import { UrlConfigurationService } from './core/config/url-configuration.service';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { AppLifecycleService } from './core/services/app-lifecycle.service';
-import { AccountIdRepository } from './core/repositories/accountId.repository';
-import { BiometricsService } from './core/services/biometrics.service';
 
 @Component({
   selector: 'app-root',
@@ -12,26 +8,9 @@ import { BiometricsService } from './core/services/biometrics.service';
   template: `<router-outlet></router-outlet>`,
   styles: [``],
 })
-export class AppComponent implements OnInit {
-  private lifecycleService = inject(AppLifecycleService);
-  private accountService = inject(AccountIdRepository);
-  private urlConfig = inject(UrlConfigurationService);
-  private router = inject(Router);
-  private biometricsService = inject(BiometricsService);
+export class AppComponent {
 
-  ngOnInit() {
-    this.biometricsService.appResumedFromBackground();
+  // This service is used to handle app lifecycle events such as pause and resume for biometric authentication.
+  constructor(_ : AppLifecycleService) { }
 
-    this.lifecycleService.lifecycle$
-      .pipe(filter((event) => event === 'foreground'))
-      .subscribe(async () => {
-        const hasAccountId = await this.accountService.hasAccountId();
-
-        if (hasAccountId) {
-          this.biometricsService.appResumedFromBackground();
-          const loginUrl = this.urlConfig.loginPath;
-          await this.router.navigate([loginUrl]);
-        }
-      });
-  }
 }

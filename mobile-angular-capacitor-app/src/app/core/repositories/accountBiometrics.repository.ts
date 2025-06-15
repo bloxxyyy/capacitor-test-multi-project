@@ -12,11 +12,13 @@ export class AccountBiometricsRepository {
 
   async enableUseOfBiometrics(): Promise<void> {
     this._hasBiometricsEnabled = true;
+    await this.localStorageService.removeStoredData(LocalStorageKey.HasBiometricEnabled);
     await this.localStorageService.setStoredData(LocalStorageKey.HasBiometricEnabled, 'true');
   }
 
   async disableUseOfBiometrics(): Promise<void> {
     this._hasBiometricsEnabled = false;
+    await this.localStorageService.removeStoredData(LocalStorageKey.HasBiometricEnabled);
     await this.localStorageService.setStoredData(LocalStorageKey.HasBiometricEnabled, 'false');
   }
 

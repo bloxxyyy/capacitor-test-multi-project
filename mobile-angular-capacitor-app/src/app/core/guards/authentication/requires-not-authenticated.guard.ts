@@ -10,6 +10,7 @@ export function requiresNotAuthenticatedGuard(): CanActivateFn {
     const urlConfigurationService = inject(UrlConfigurationService);
 
     const hasAccountId = await authenticationStateService.hasAccountId();
+
     if (hasAccountId) {
       const forbiddenUrl = urlConfigurationService.forbidden;
       return router.createUrlTree([forbiddenUrl]);

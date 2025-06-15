@@ -10,6 +10,7 @@ import { UserRole } from '../enums/user-role';
   providedIn: 'root',
 })
 export class AuthenticationService {
+
   private accountIdRepo = inject(AccountIdRepository);
   private accountRoleRepo = inject(AccountRolesRepository);
   private biometricsService = inject(BiometricsService);
@@ -23,7 +24,7 @@ export class AuthenticationService {
     await this.router.navigate([this.urlConfig.accountAuthentication]);
   }
 
-  async onLogin(): Promise<void> {
+  async onLoginWithAccountInformation(): Promise<void> {
     await this.accountIdRepo.setAccount('test-account-id');
     await this.accountRoleRepo.setAccountRoles([UserRole.User]);
     await this.biometricsService.enableUseOfBiometrics();

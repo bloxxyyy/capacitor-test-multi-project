@@ -10,7 +10,6 @@ import { UserRole } from '../enums/user-role';
   providedIn: 'root',
 })
 export class AuthenticationService {
-
   private accountIdRepo = inject(AccountIdRepository);
   private accountRoleRepo = inject(AccountRolesRepository);
   private biometricsService = inject(BiometricsService);

@@ -13,4 +13,11 @@ export const ACCOUNT_OVERVIEW_ROUTES: Routes = [
         '../../features/account-overview/account-overview-dashboard/account-overview-dashboard.component'
       ).then((m) => m.AccountOverviewDashboardComponent),
   },
+  {
+    path: 'account-overview-settings',
+    loadComponent: () =>
+      import('../../features/account-overview/account-settings/account-settings.component').then(
+        (m) => m.AccountSettingsComponent
+      ),
+  },
 ];

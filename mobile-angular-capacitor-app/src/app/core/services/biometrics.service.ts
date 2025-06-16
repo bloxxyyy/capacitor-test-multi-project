@@ -1,15 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { NativeBiometric } from '@capgo/capacitor-native-biometric';
 import { AccountBiometricsRepository } from '../repositories/accountBiometrics.repository';
+
 @Injectable({
   providedIn: 'root',
 })
 export class BiometricsService {
-
   private accountBiometricsRepository = inject(AccountBiometricsRepository);
 
   async tryVerifyWithBiometrics(): Promise<boolean> {
-
     const hasBiometricsEnabled = await this.hasBiometricEnabled();
     if (!hasBiometricsEnabled) {
       return false;

@@ -25,9 +25,17 @@ export const AUTHENTICATION_ROUTES: Routes = [
   },
   {
     path: 'login',
+    canActivate: [requiresNotAuthenticatedGuard()],
     loadComponent: () =>
       import('../../features/account-authentication/login/login.component').then(
         (m) => m.LoginComponent
       ),
+  },
+  {
+    path: 'pin-verification',
+    loadComponent: () =>
+      import(
+        '../../features/account-authentication/pin-verification/pin-verification.component'
+      ).then((m) => m.PinVerificationComponent),
   },
 ];

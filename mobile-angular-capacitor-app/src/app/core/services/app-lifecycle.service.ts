@@ -1,9 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { App } from '@capacitor/app';
-import { BiometricsService } from './biometrics.service';
-import { Router } from '@angular/router';
-import { UrlConfigurationService } from '../config/url-configuration.service';
 import { AccountIdRepository } from '../repositories/accountId.repository';
+import { UserVerificationService } from './user-verification.service';
 
 export type AppLifecycleEvent = 'startup' | 'foreground' | 'background';
 
@@ -11,16 +9,24 @@ export type AppLifecycleEvent = 'startup' | 'foreground' | 'background';
   providedIn: 'root',
 })
 export class AppLifecycleService {
-  private wasManuallyPaused = false;
   private resumedFromBackground = false;
 
-  private biometricsService = inject(BiometricsService);
+  private userVerificationService = inject(UserVerificationService);
   private accountIdRepo = inject(AccountIdRepository);
-  private router = inject(Router);
-  private urlConfig = inject(UrlConfigurationService);
 
   constructor() {
     this.registerLifecycleEvents();
+    (async () => {
+      await this.onStartup();
+    })();
+  }
+
+  async onStartup() {
+    const hasAccountId = await this.accountIdRepo.hasAccountId();
+    if (hasAccountId) {
+      this.userVerificationService.wasManuallyPaused = true;
+      await this.userVerificationService.verifyWithBiometrics();
+    }
   }
 
   private registerLifecycleEvents() {
@@ -29,9 +35,8 @@ export class AppLifecycleService {
     });
 
     App.addListener('resume', async () => {
-
-      if (this.wasManuallyPaused) {
-        this.wasManuallyPaused = false;
+      if (this.userVerificationService.wasManuallyPaused) {
+        this.userVerificationService.wasManuallyPaused = false;
         return; // was paused for biometrics, skip
       }
 
@@ -41,20 +46,10 @@ export class AppLifecycleService {
         const hasAccountId = await this.accountIdRepo.hasAccountId();
 
         if (hasAccountId) {
-          this.wasManuallyPaused = true;
-          const isVerifiedWithBiometrics = await this.biometricsService.tryVerifyWithBiometrics();
-
-          if (isVerifiedWithBiometrics) {
-            console.log('App resumed from background and biometrics verified successfully.');
-            await this.router.navigate([this.urlConfig.accountOverview]);
-          }
-
-          if (!isVerifiedWithBiometrics) {
-            console.log('App resumed from background but biometrics verification failed.');
-            await this.router.navigate([this.urlConfig.loginPath]);
-          }
+          this.userVerificationService.wasManuallyPaused = true;
+          await this.userVerificationService.verifyWithBiometrics();
         }
       }
-    });3
+    });
   }
 }

@@ -3,7 +3,7 @@ import { setupZonelessTestEnv } from 'jest-preset-angular/setup-env/zoneless';
 
 setupZonelessTestEnv();
 
-// Considering we dont want jest to run the actual Capacitor plugins, we mock them here.
+// Considering we don't want jest to run the actual Capacitor plugins, we mock them here.
 jest.mock('@capgo/capacitor-native-biometric', () => ({
   CapacitorNativeBiometric: {
     isAvailable: jest.fn().mockResolvedValue({ value: true }),

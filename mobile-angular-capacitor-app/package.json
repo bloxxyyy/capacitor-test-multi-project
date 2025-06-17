@@ -42,7 +42,7 @@
     "@testing-library/angular": "^17.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^29.5.14",
-    "angular-eslint": "^20.0.0",
+    "angular-eslint": "^20.1.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",

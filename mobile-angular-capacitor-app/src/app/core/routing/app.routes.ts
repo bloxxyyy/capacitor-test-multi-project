@@ -20,10 +20,12 @@ export const routes: Routes = [
   },
   {
     path: 'forbidden',
-    loadComponent: () => import('../../no-page.component').then((m) => m.NoPageComponent),
+    loadComponent: () =>
+      import('../../features/no-page/no-page.component').then((m) => m.NoPageComponent),
   },
   {
     path: '**',
-    loadComponent: () => import('../../no-page.component').then((m) => m.NoPageComponent),
+    loadComponent: () =>
+      import('../../features/no-page/no-page.component').then((m) => m.NoPageComponent),
   },
 ];

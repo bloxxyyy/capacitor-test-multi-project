@@ -7,8 +7,7 @@ import { UserVerificationService } from '../app/core/services/user-verification.
 import { AccountIdRepository } from '../app/core/repositories/accountId.repository';
 
 describe('AppComponent', () => {
-
-   beforeEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 

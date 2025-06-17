@@ -2,14 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { UrlConfigurationService } from '../app/core/config/url-configuration.service';
 import { requiresNotAuthenticatedGuard } from '../app/core/guards/authentication/requires-not-authenticated.guard';
 import { AccountIdRepository } from '../app/core/repositories/accountId.repository';
-import { UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 describe('requiresNotAuthenticatedGuard (zoneless)', () => {
   let mockAccountIdRepository: jest.Mocked<AccountIdRepository>;
   let mockUrlConfigurationService: UrlConfigurationService;
 
-  const mockRoute = { path: '' } as any;
-  const mockState = { url: '' } as any;
+  const mockRoute = {} as ActivatedRouteSnapshot;
+  const mockState = { url: '/test' } as RouterStateSnapshot;
 
   beforeEach(() => {
     mockAccountIdRepository = {
@@ -17,42 +17,38 @@ describe('requiresNotAuthenticatedGuard (zoneless)', () => {
     } as unknown as jest.Mocked<AccountIdRepository>;
 
     mockUrlConfigurationService = {
-      forbidden: '/forbidden'
+      forbidden: '/forbidden',
     } as UrlConfigurationService;
 
     TestBed.configureTestingModule({
       imports: [],
       providers: [
         { provide: AccountIdRepository, useValue: mockAccountIdRepository },
-        { provide: UrlConfigurationService, useValue: mockUrlConfigurationService }
-      ]
+        { provide: UrlConfigurationService, useValue: mockUrlConfigurationService },
+      ],
     });
   });
 
   it('should allow access when not authenticated', async () => {
-
     // Arrange
     mockAccountIdRepository.hasAccountId.mockResolvedValue(false);
 
     // Act
     const guardFn = requiresNotAuthenticatedGuard();
-    const result = await TestBed.runInInjectionContext( () =>  guardFn(mockRoute, mockState) );
+    const result = await TestBed.runInInjectionContext(() => guardFn(mockRoute, mockState));
 
     // Assert
     expect(result).toBe(true);
     expect(mockAccountIdRepository.hasAccountId).toHaveBeenCalledTimes(1);
   });
 
-   it('should redirect to forbidden route when authenticated', async () => {
-
+  it('should redirect to forbidden route when authenticated', async () => {
     // Arrange
     mockAccountIdRepository.hasAccountId.mockResolvedValue(true);
 
     // Act
     const guardFn = requiresNotAuthenticatedGuard();
-    const result = await TestBed.runInInjectionContext(() =>
-      guardFn(mockRoute, mockState)
-    );
+    const result = await TestBed.runInInjectionContext(() => guardFn(mockRoute, mockState));
 
     // Assert
     expect(result).toBeInstanceOf(UrlTree);

@@ -1,50 +1,39 @@
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { UrlConfigurationService } from '../config/url-configuration.service';
+import { AccountIdRepository } from '../repositories/accountId.repository';
+import { AccountRolesRepository } from '../repositories/accountRoles.repository';
+import { BiometricsService } from './biometrics.service';
 import { UserRole } from '../enums/user-role';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { LocalStorageKey } from '../../shared/enums/local-storage-key';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private localStorageService = inject(LocalStorageService);
+  private accountIdRepo = inject(AccountIdRepository);
+  private accountRoleRepo = inject(AccountRolesRepository);
+  private biometricsService = inject(BiometricsService);
+  private router = inject(Router);
+  private urlConfig = inject(UrlConfigurationService);
 
-  async getAccountRoles(): Promise<UserRole[] | string[]> {
-    const rolesJson = await this.localStorageService.getStoredData(LocalStorageKey.AccountRoles);
-
-    if (!rolesJson) {
-      return [] as UserRole[] | string[];
-    }
-
-    try {
-      return JSON.parse(rolesJson) as UserRole[] | string[];
-    } catch (error) {
-      console.error('Error parsing account roles:', error);
-      return [] as UserRole[] | string[];
-    }
+  async onLogout() {
+    await this.accountIdRepo.unsetAccount();
+    await this.accountRoleRepo.unsetAccountRoles();
+    await this.biometricsService.disableUseOfBiometrics();
+    await this.router.navigate([this.urlConfig.accountAuthentication]);
   }
 
-  async hasAccountId(): Promise<boolean> {
-    const accountId = await this.localStorageService.getStoredData(LocalStorageKey.AccountId);
-    return !!accountId;
+  async onLoginWithAccountInformation(): Promise<void> {
+    await this.accountIdRepo.setAccount('test-account-id');
+    await this.accountRoleRepo.setAccountRoles([UserRole.User]);
+    await this.biometricsService.enableUseOfBiometrics();
+    await this.router.navigate([this.urlConfig.accountOverview]);
   }
 
-  async login(roles: UserRole[] = [UserRole.User]): Promise<void> {
-    const testAccountId = 'test-account-id';
-
-    await this.localStorageService.setStoredData(LocalStorageKey.AccountId, testAccountId);
-    await this.localStorageService.setStoredData(
-      LocalStorageKey.AccountRoles,
-      JSON.stringify(roles)
-    );
-  }
-
-  async logout(): Promise<void> {
-    await this.localStorageService.removeStoredData(LocalStorageKey.AccountId);
-    await this.localStorageService.removeStoredData(LocalStorageKey.AccountRoles);
-    await this.localStorageService.setStoredData(
-      LocalStorageKey.AccountRoles,
-      JSON.stringify([UserRole.Guest])
-    );
+  async onCreateAccount(): Promise<void> {
+    await this.biometricsService.enableUseOfBiometrics();
+    await this.accountIdRepo.setAccount('test-account-id');
+    await this.accountRoleRepo.setAccountRoles([UserRole.User]);
+    await this.router.navigate([this.urlConfig.accountOverview]);
   }
 }

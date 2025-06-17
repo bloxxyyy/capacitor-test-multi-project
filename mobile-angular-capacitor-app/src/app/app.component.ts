@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AppLifecycleService } from './core/services/app-lifecycle.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { RouterOutlet } from '@angular/router';
   template: `<router-outlet></router-outlet>`,
   styles: [``],
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+    inject(AppLifecycleService);
+  }
+}

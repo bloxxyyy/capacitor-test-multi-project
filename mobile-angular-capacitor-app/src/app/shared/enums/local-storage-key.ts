@@ -3,6 +3,7 @@
  * so we use a prefix to avoid conflicts with other apps.
  */
 export enum LocalStorageKey {
+  HasBiometricEnabled = 'MyAppPrefix-hasBiometricEnabled',
   AccountId = 'MyAppPrefix-accountId',
   AccountRoles = 'MyAppPrefix-accountRoles',
 }

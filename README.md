@@ -18,6 +18,13 @@ No part of this code may be used, copied, modified, or distributed without expli
 
 ---
 
+### Student Use Exception
+
+Students are permitted to use this project for educational and academic purposes free of charge,  
+provided it is not used for commercial, resale, or distribution purposes.
+
+See [LICENSE](./LICENSE) for full details.
+
 ## About
 
 This starter project provides foundational tools and components to help developers implement ISO 27001-aligned security and compliance controls in mobile apps built with Angular and Capacitor.

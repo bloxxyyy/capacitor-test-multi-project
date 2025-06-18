@@ -36,5 +36,5 @@ It also incorporates best practices to meet app store compliance requirements fo
 
 # Contributing & Security
 
-- Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.  
-- For security issues, please follow the process in [SECURITY.md](./SECURITY.md).
+- Contributions are welcome! See [CONTRIBUTING](./CONTRIBUTING.md) for guidelines.  
+- For security issues, please follow the process in [SECURITY](./SECURITY.md).

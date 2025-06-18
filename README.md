@@ -13,7 +13,7 @@ addressing key regulatory and data protection requirements.
 © 2025 bloxxyyy. All rights reserved.  
 This repository contains proprietary software.  
 
-See [LICENSE](./LICENSE) for full license terms.  
+See [LICENSE](./LICENSE.txt) for full license terms.  
 No part of this code may be used, copied, modified, or distributed without explicit prior written permission.
 
 ---
@@ -23,7 +23,7 @@ No part of this code may be used, copied, modified, or distributed without expli
 Students are permitted to use this project for educational and academic purposes free of charge,  
 provided it is not used for commercial, resale, or distribution purposes.
 
-See [LICENSE](./LICENSE) for full details.
+See [LICENSE](./LICENSE.txt) for full details.
 
 ---
 

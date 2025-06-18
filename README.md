@@ -25,8 +25,16 @@ provided it is not used for commercial, resale, or distribution purposes.
 
 See [LICENSE](./LICENSE) for full details.
 
+---
+
 ## About
 
 This starter project provides foundational tools and components to help developers implement ISO 27001-aligned security and compliance controls in mobile apps built with Angular and Capacitor.
-
 It also incorporates best practices to meet app store compliance requirements for both iOS and Android platforms.
+
+---
+
+# Contributing & Security
+
+- Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.  
+- For security issues, please follow the process in [SECURITY.md](./SECURITY.md).

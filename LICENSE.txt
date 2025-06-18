@@ -3,5 +3,8 @@ Copyright (c) 2025 bloxxyyy
 All rights reserved.
 
 This software and its source code may not be used, copied, modified, or distributed in any form without the explicit prior written permission of the copyright holder.
-
 Use of this software is permitted only under a formal license agreement.
+
+Special Exception for Students:
+Students may use this software for free for personal, and non-commercial academic purposes only.
+Commercial use, redistribution, or resale of this software is strictly prohibited without a formal license agreement.

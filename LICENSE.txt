@@ -1,0 +1,7 @@
+Copyright (c) 2025 bloxxyyy
+
+All rights reserved.
+
+This software and its source code may not be used, copied, modified, or distributed in any form without the explicit prior written permission of the copyright holder.
+
+Use of this software is permitted only under a formal license agreement.

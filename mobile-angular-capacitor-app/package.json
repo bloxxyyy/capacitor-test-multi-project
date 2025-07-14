@@ -23,7 +23,7 @@
     "@angular/core": "^20.0.2",
     "@angular/forms": "^20.0.2",
     "@angular/platform-browser": "^20.0.2",
-    "@angular/platform-browser-dynamic": "^20.0.2",
+    "@angular/platform-browser-dynamic": "^20.1.0",
     "@angular/router": "^20.0.2",
     "@capacitor/android": "^7.3.0",
     "@capacitor/app": "^7.0.1",

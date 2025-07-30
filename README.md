@@ -8,6 +8,13 @@ addressing key regulatory and data protection requirements.
 
 ---
 
+# How to run
+
+To check out the mobile app check out the Readme at: [README](./blob/Development/mobile-angular-capacitor-app/README.md)
+
+
+---
+
 ## License
 
 © 2025 bloxxyyy. All rights reserved.  

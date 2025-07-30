@@ -10,7 +10,7 @@ addressing key regulatory and data protection requirements.
 
 # How to run
 
-To check out the mobile app check out the Readme at: [README](./blob/Development/mobile-angular-capacitor-app/README.md)
+To check out the mobile app check out the Readme at: [README](./mobile-angular-capacitor-app/README.md)
 
 
 ---

@@ -9,7 +9,7 @@ repos:
     rev: 25.1.0
     hooks:
     -   id: black
-        args: ['--config=./pyproject.toml']
+        args: ['--config=python-example-backend-api/pyproject.toml']
 -   repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.12.7
     hooks:

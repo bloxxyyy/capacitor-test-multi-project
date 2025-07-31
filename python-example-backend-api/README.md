@@ -10,3 +10,5 @@ to deactive the venv enviroment run in the venv console
 Make sure to install pre-commit; pre-commit install; To run formatting and linting before pushing your code.
 
 Includes, pytest, code coverage, ruff and black
+
+to check versions: pip index versions {packageName}

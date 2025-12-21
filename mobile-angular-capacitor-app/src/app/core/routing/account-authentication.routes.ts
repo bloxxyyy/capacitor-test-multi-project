@@ -11,17 +11,17 @@ export const AUTHENTICATION_ROUTES: Routes = [
     path: 'authentication-dashboard',
     canActivate: [requiresNotAuthenticatedGuard()],
     loadComponent: () =>
-      import(
-        '../../features/account-authentication/authentication-dashboard/authentication-dashboard.component'
-      ).then((m) => m.AuthenticationDashboardComponent),
+      import('../../features/account-authentication/authentication-dashboard/authentication-dashboard.component').then(
+        (m) => m.AuthenticationDashboardComponent
+      ),
   },
   {
     path: 'create-new-account',
     canActivate: [requiresNotAuthenticatedGuard()],
     loadComponent: () =>
-      import(
-        '../../features/account-authentication/create-new-account/create-new-account.component'
-      ).then((m) => m.CreateNewAccountComponent),
+      import('../../features/account-authentication/create-new-account/create-new-account.component').then(
+        (m) => m.CreateNewAccountComponent
+      ),
   },
   {
     path: 'login',
@@ -34,8 +34,8 @@ export const AUTHENTICATION_ROUTES: Routes = [
   {
     path: 'pin-verification',
     loadComponent: () =>
-      import(
-        '../../features/account-authentication/pin-verification/pin-verification.component'
-      ).then((m) => m.PinVerificationComponent),
+      import('../../features/account-authentication/pin-verification/pin-verification.component').then(
+        (m) => m.PinVerificationComponent
+      ),
   },
 ];

@@ -9,9 +9,9 @@ export const ACCOUNT_OVERVIEW_ROUTES: Routes = [
   {
     path: 'account-overview-dashboard',
     loadComponent: () =>
-      import(
-        '../../features/account-overview/account-overview-dashboard/account-overview-dashboard.component'
-      ).then((m) => m.AccountOverviewDashboardComponent),
+      import('../../features/account-overview/account-overview-dashboard/account-overview-dashboard.component').then(
+        (m) => m.AccountOverviewDashboardComponent
+      ),
   },
   {
     path: 'account-overview-settings',
